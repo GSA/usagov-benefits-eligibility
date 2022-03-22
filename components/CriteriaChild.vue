@@ -10,7 +10,15 @@
         :response="response"
         location="left-rail" />
     </div>
-
+    <div
+      v-if="type === 'location'"
+      :key="criteriaKey">
+      <LocationInput
+        :criteriaKey="criterion.criteriaKey"
+        :label="getCriterionLabel(criterion)"
+        :response="doesCriterionMatchSelection(criterion)"
+        location="benefit-card" />
+    </div>
     <div
       v-if="type === 'select'"
       :key="criteriaKey">
@@ -40,12 +48,14 @@ import { mapGetters } from "vuex"
 import RadioButton from "./RadioButton"
 import DropDown from "./DropDown"
 import CheckBox from "./CheckBox"
+import LocationInput from "./LocationInput"
 
 export default {
   components: {
     RadioButton,
     DropDown,
     CheckBox,
+    LocationInput,
   },
   props: {
     criteriaKey: {

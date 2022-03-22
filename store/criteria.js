@@ -1,4 +1,5 @@
 import Vue from "vue"
+import validateLocation from "~/services/locationHelper"
 import stringToHash from "../services/stringToHash"
 
 export const state = () => ({
@@ -55,9 +56,22 @@ export const getters = {
     if (!getters.isCriterionSelected(criterion) || !criterion.acceptableValues) {
       return null
     }
+    if (getters.getCriterionByEligibilityKey(criterion.criteriaKey).type === "location") {
+      return getters.validateCriterionLocation(criterion)
+    }
     return !!criterion.acceptableValues.find(
       (val) => val === getters.getCriterionByEligibilityKey(criterion.criteriaKey).response
     )
+  },
+  validateCriterionLocation: (state, getters) => (criterion) => {
+    if (!getters.isCriterionSelected(criterion)) {
+      return null
+    }
+    const response = getters.getResponseByEligibilityKey(criterion.criteriaKey)
+    return validateLocation({
+      criterion,
+      response,
+    })
   },
   getCriterionByEligibilityKey: (state) => (criteriaKey) => {
     return (

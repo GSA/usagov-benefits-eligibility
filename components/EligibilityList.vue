@@ -48,7 +48,15 @@
                 :criteria-index="index"
                 location="benefit-card" />
             </div>
-
+            <div
+              v-if="getCriterionByEligibilityKey(criterion.criteriaKey).type === 'location'"
+              class="usa-text-input">
+              <LocationInput
+                :criteriaKey="criterion.criteriaKey"
+                :label="getCriterionLabel(criterion)"
+                :response="doesCriterionMatchSelection(criterion)"
+                location="benefit-card" />
+            </div>
             <div v-if="getCriterionByEligibilityKey(criterion.criteriaKey).type === 'radio'">
               <RadioButton
                 :criteria-key="criterion.criteriaKey"
@@ -75,9 +83,10 @@ import { mapGetters } from "vuex"
 import RadioButton from "./RadioButton.vue"
 import DropDown from "./DropDown.vue"
 import CheckBox from "./CheckBox.vue"
+import LocationInput from "./LocationInput.vue"
 
 export default {
-  components: { RadioButton, DropDown, CheckBox },
+  components: { RadioButton, DropDown, CheckBox, LocationInput },
   props: {
     benefitEligibilityCriteria: {
       type: Array,
