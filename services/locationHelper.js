@@ -23,7 +23,7 @@ function validateLocation({ criterion, response, element }) {
   } else {
     const zipCodeInfo = zipnrviens.lookup(parseInt(response))
     const { state, county } = zipCodeInfo
-    const requestUrl = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?$filter(state eq '${state}' and declaredCountyArea eq '${county} (County)') and incidentEndDate eq ''}`
+    const requestUrl = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?$filter(state eq '${state}' and declaredCountyArea eq '${county} (County)') and disasterCloseOutDate eq ''}`
     axios
       .get(requestUrl)
       .then((response) => {
