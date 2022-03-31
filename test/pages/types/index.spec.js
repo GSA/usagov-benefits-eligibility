@@ -2,7 +2,7 @@ import { shallowMount } from "@vue/test-utils"
 import Page from "@/pages/types/index.vue"
 import beforeAllTests from "@/test/beforeAllTests"
 
-describe("pages/types/index.vue", () => {
+describe("pages/types/_type.vue", () => {
   beforeAll(async () => {
     await beforeAllTests()
   })

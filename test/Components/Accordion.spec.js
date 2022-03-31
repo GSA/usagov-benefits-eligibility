@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils"
+import { createLocalVue, shallowMount } from "@vue/test-utils"
 import Accordion from "@/components/Accordion.vue"
 import beforeAllTests from "@/test/beforeAllTests"
 import Vuex from "vuex"
@@ -110,7 +110,6 @@ describe("Accordion", () => {
   }
 
   it("should be a Vue instance", () => {
-    const doesCriterionMatchSelectionSpy = jest.fn()
     const wrapper = shallowMount(Accordion, {
       propsData,
       store,
@@ -121,7 +120,6 @@ describe("Accordion", () => {
   })
 
   it("should open and close accordions when called", () => {
-    const doesCriterionMatchSelectionSpy = jest.fn()
     const wrapper = shallowMount(Accordion, {
       propsData,
       store,
@@ -134,5 +132,77 @@ describe("Accordion", () => {
     expect(wrapper.vm.toggleAccordion).toHaveBeenCalled()
     wrapper.vm.focus()
     expect(wrapper.vm.toggleAccordion).toHaveBeenCalled()
+  })
+
+  describe("sanitizedBenefitUrl tests", () => {
+    it("text example.com", () => {
+      const wrapper = shallowMount(Accordion, {
+        propsData,
+        store,
+        localVue,
+      })
+      const url = wrapper.vm.sanitizedBenefitUrl({
+        source: {
+          link: "http://www.example.com",
+        },
+      })
+      expect(url).toBe("http://www.example.com")
+    })
+    it("sanitizedBenefitUrl about:blank if javascript is injected", () => {
+      const wrapper = shallowMount(Accordion, {
+        propsData,
+        store,
+        localVue,
+      })
+      const url = wrapper.vm.sanitizedBenefitUrl({
+        source: {
+          link: "javascript:somethingBad('dd')",
+        },
+      })
+      expect(url).toBe("about:blank")
+    })
+  })
+
+  describe("getCriteriaMatchLanguage tests", () => {
+    it("false value for critiera selected", () => {
+      getters = {
+        doesCriterionMatchSelection: () => jest.fn().mockReturnValue(false).mockReturnValueOnce(false),
+        getTotalEligibleCriteria: () => jest.fn().mockReturnValue(2).mockReturnValueOnce(3).mockReturnValueOnce(0),
+      }
+      store = new Vuex.Store({
+        modules: {
+          criteria: {
+            namespaced: true,
+            getters,
+          },
+        },
+      })
+      const wrapper = shallowMount(Accordion, {
+        propsData,
+        store,
+      })
+      const text = wrapper.vm.getCriteriaMatchLanguage([{}])
+      expect(text).toBe("(you are not eligible)")
+    })
+    it("nothing selected", () => {
+      getters = {
+        doesCriterionMatchSelection: () => jest.fn().mockReturnValue(null),
+        getTotalEligibleCriteria: () => jest.fn().mockReturnValue(0),
+      }
+      store = new Vuex.Store({
+        modules: {
+          criteria: {
+            namespaced: true,
+            getters,
+          },
+        },
+      })
+      const wrapper = shallowMount(Accordion, {
+        propsData,
+        store,
+      })
+      const text = wrapper.vm.getCriteriaMatchLanguage([{}])
+      expect(text).toBe(null)
+    })
   })
 })

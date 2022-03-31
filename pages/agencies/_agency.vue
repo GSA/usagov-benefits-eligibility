@@ -4,22 +4,22 @@
       <div class="grid-row grid-gap">
         <div class="tablet:grid-col">
           <h1
-            v-if="benefitTopic"
+            v-if="benefitAgency"
             class="font-heading-lg tablet:font-heading-xl margin-top-5 text-secondary">
-            {{ benefitTopic }}
+            {{ benefitAgency }}
           </h1>
           <p
-            v-if="topic && topic.lede"
+            v-if="agency && agency.lede"
             class="tablet:font-heading-lg line-height-serif-6 text-normal measure-6">
-            {{ topic.lede }}
+            {{ agency.lede }}
           </p>
         </div>
       </div>
 
-      <div class="grid-row grid-gap print:display-block">
+      <div class="grid-row grid-gap">
         <div class="tablet:grid-col margin-bottom-3">Showing {{ lifeEventBenefits.length }} benefits</div>
       </div>
-
+      <!-- Desktop meta sort and open -->
       <div class="display-none tablet:display-flex grid-row grid-gap print:display-block">
         <div class="tablet:grid-col margin-bottom-3">
           <div>
@@ -35,6 +35,13 @@
               aria-controls="acc-id"
               @click="closeAll">
               Close All
+            </button>
+            /
+            <button
+              class="usa-button usa-button--unstyled clear-all"
+              aria-controls="acc-id"
+              @click="clearCriteria">
+              Clear Selections
             </button>
           </div>
         </div>
@@ -64,12 +71,19 @@
             </div>
           </div>
           <!-- Mobile meta sort and open -->
-          <h2 class="tablet:display-none font-heading-lg margin-top-1">Benefits Results</h2>
-          <OpenCloseButtons
-            :is-open-active-prop="true"
-            @open-all="openAll"
-            @close-all="closeAll" />
-
+          <div class="tablet:display-none">
+            <h2 class="font-heading-lg margin-top-1">Benefits Results</h2>
+            <button
+              class="usa-button clear-all"
+              aria-controls="acc-id"
+              @click="clearCriteria">
+              Clear Selections
+            </button>
+            <OpenCloseButtons
+              :is-open-active-prop="true"
+              @open-all="openAll"
+              @close-all="closeAll" />
+          </div>
           <Accordion
             ref="accordion"
             :life-event-benefits="lifeEventBenefits"
@@ -82,14 +96,13 @@
 
       <div class="grid-row grid-gap margin-top-2">
         <div class="grid-col">
-          <print @print="openAll()" />
+          <print @print="openAll" />
         </div>
       </div>
     </section>
-
     <cross-sell
-      title="Other topics that might be relevant to you."
-      :cards="topic.related"
+      title="Other agencies that might be relevant to you."
+      :cards="agency.related"
       class="print:display-none" />
   </div>
 </template>
@@ -106,9 +119,9 @@ export default {
   mixins: [mapTags],
   data() {
     return {
-      benefitTopic: "",
+      benefitAgency: "",
       lifeEventBenefits: [],
-      topic: {
+      agency: {
         title: "",
         summary: "",
         lede: "",
@@ -118,29 +131,30 @@ export default {
     }
   },
   async fetch() {
-    this.benefitTopic = _.capitalize(_.lowerCase(this.$route.params.slug))
-    const lifeEventBenefits = await this.$content("benefits")
-      .where({
-        tags: { $contains: _.lowerCase(this.$route.params.slug) },
-      })
-      .sortBy("title")
-      .fetch()
+    const slug = this.$route.params.agency.startsWith("u-s-")
+      ? _.lowerCase(this.$route.params.agency).replace(/^u s /, "u.s. ")
+      : _.lowerCase(this.$route.params.agency)
+    const agencyRegex = new RegExp(_.escapeRegExp(slug), "i")
+    const lifeEventBenefits = await this.$content("benefits").sortBy("title").fetch()
     const allEligibilityCriteria = (await this.$content("criteria").fetch()).body
     await this.$store.dispatch("criteria/populate", allEligibilityCriteria)
+    this.lifeEventBenefits = lifeEventBenefits.filter(
+      (benefit) => benefit?.source?.name && agencyRegex.test(benefit.source.name)
+    )
+    this.benefitAgency = this.lifeEventBenefits[0]?.source?.name
     // eslint-disable-next-line node/handle-callback-err
-    this.topic = await this.$content("types", this.$route.params.slug)
+    this.agency = await this.$content("agencies", this.$route.params.agency)
       .fetch()
       .catch((_err) => {})
-    this.topic.related = []
-    for (const related of this.topic.relatedKeys || []) {
-      this.topic.related.push(await this.$content("types", related).fetch())
+    this.agency.related = []
+    for (const related of this.agency.relatedKeys || []) {
+      this.agency.related.push(await this.$content("agencies", related).fetch())
     }
-    this.lifeEventBenefits = lifeEventBenefits
   },
   /* istanbul ignore next */
   head() {
     return {
-      title: this.benefitTopic,
+      title: this.benefitAgency,
     }
   },
   methods: {
@@ -153,6 +167,15 @@ export default {
     closeAll() {
       this.$refs.accordion.closeAll()
     },
+    clearCriteria() {
+      this.$store.dispatch("criteria/clear")
+    },
   },
 }
 </script>
+
+<style scoped>
+h1 {
+  text-transform: capitalize;
+}
+</style>

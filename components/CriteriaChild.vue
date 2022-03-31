@@ -20,6 +20,17 @@
         location="benefit-card" />
     </div>
     <div
+      v-if="type === 'date'"
+      :key="criteriaKey">
+      <DateInput
+        :criteria-key="criteriaKey"
+        :label="getCriterionLabel()"
+        :response="doesCriterionDateMatch(getCriterionByEligibilityKey(criteriaKey))"
+        :date-response="getCriterionByEligibilityKey(criteriaKey).response"
+        location="left-rail" />
+    </div>
+
+    <div
       v-if="type === 'select'"
       :key="criteriaKey">
       <DropDown
@@ -49,6 +60,7 @@ import RadioButton from "./RadioButton"
 import DropDown from "./DropDown"
 import CheckBox from "./CheckBox"
 import LocationInput from "./LocationInput"
+import DateInput from "./DateInput.vue"
 
 export default {
   components: {
@@ -56,6 +68,7 @@ export default {
     DropDown,
     CheckBox,
     LocationInput,
+    DateInput
   },
   props: {
     criteriaKey: {
@@ -86,6 +99,8 @@ export default {
   computed: {
     ...mapGetters({
       getCriterionByEligibilityKey: "criteria/getCriterionByEligibilityKey",
+      getResponseByEligibilityKey: "criteria/getResponseByEligibilityKey",
+      doesCriterionDateMatch: "criteria/doesCriterionDateMatch",
     }),
   },
   methods: {

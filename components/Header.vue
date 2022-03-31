@@ -52,7 +52,10 @@
                     {{ $t("banner.dropdown.official") }}
                   </strong>
                   <br />
-                  <span v-html="$t('banner.dropdown.officialDetails')" />
+                  <span>
+                    {{ $t("banner.dropdown.officialDetailsDotGovPrefix") }}
+                    <strong>.gov</strong>{{ $t("banner.dropdown.officialDetails") }}
+                  </span>
                 </p>
               </div>
             </div>
@@ -170,7 +173,6 @@
                   role="img">
                   <use xlink:href="~/assets/img/sprite.svg#search" />
                 </svg>
-                <!-- <span class="text-middle">Share my selections</span> -->
               </button>
             </form>
           </div>

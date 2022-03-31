@@ -1,8 +1,8 @@
 import { shallowMount } from "@vue/test-utils"
-import Page from "@/pages/types/_slug/index.vue"
-import beforeAllTests from "@/test/beforeAllTests"
+import Page from "~/pages/types/_type.vue"
+import beforeAllTests from "~/test/beforeAllTests"
 
-describe("pages/types/_slug/index.vue", () => {
+describe("pages/types/_type.vue", () => {
   let $fetchState
 
   beforeAll(async () => {
@@ -49,7 +49,7 @@ describe("pages/types/_slug/index.vue", () => {
     }
     const $route = {
       params: {
-        slug: "one-two-three",
+        type: "one-two-three",
       },
     }
     const $store = {
@@ -68,17 +68,24 @@ describe("pages/types/_slug/index.vue", () => {
     expect(wrapper.vm.lifeEventBenefits.map((b) => b.title).join()).toBe("One,Two")
   })
 
-  it("should expand and collapse all accordian cards", async () => {
+  it("should expand,collapse, and clear all accordion cards", async () => {
+    const $store = {
+      dispatch: () => Promise.resolve(),
+    }
     const wrapper = shallowMount(Page, {
-      mocks: { $fetchState },
+      mocks: { $fetchState, $store },
     })
     const openAllSpy = jest.fn()
     const closeAllSpy = jest.fn()
+    const clearAllSpy = jest.fn()
     wrapper.vm.$refs.accordion.openAll = openAllSpy
     wrapper.vm.$refs.accordion.closeAll = closeAllSpy
+    wrapper.vm.$store.dispatch = clearAllSpy
     await wrapper.find(".usa-button.open-all").trigger("click")
     expect(openAllSpy).toHaveBeenCalled()
     await wrapper.find(".usa-button.close-all").trigger("click")
     expect(closeAllSpy).toHaveBeenCalled()
+    await wrapper.find(".usa-button.clear-all").trigger("click")
+    expect(clearAllSpy).toHaveBeenCalled()
   })
 })

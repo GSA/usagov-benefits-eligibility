@@ -10,11 +10,11 @@
     <div
       v-for="benefit in lifeEventBenefits"
       :key="`acc-key-${benefit.slug}`"
-      class="break-inside-avoid margin-bottom-2 border-left-105"
-      :class="getBorderColor(benefit.eligibility)">
+      class="break-inside-avoid margin-bottom-2">
       <h2
         :id="`acc-h-${benefit.slug}-${cid}`"
-        class="usa-accordion__heading">
+        class="usa-accordion__heading border-left-105"
+        :class="getBorderColor(benefit.eligibility)">
         <button
           ref="accordionButtons"
           class="usa-accordion__button"
@@ -41,14 +41,14 @@
             :title="tag.title"
             :aria-label="tag.title" />
         </div>
-        <template v-if="benefit.source && benefit.source.name && benefit.source.link">
+        <template v-if="benefit.source && benefit.source.link && benefit.source.name">
           <h3
             class="font-sans-xs text-normal text-base-dark margin-bottom-0"
             style="font-size: 1rem">
             Provided by
             <a
               class="usa-link"
-              :href="benefit.source ? benefit.source.link : '#'"
+              :href="sanitizedBenefitUrl(benefit)"
               target="_blank"
               >{{ benefit.source.name }}</a
             >
@@ -61,7 +61,7 @@
         </template>
         <EligibilityList
           :benefit-eligibility-criteria="benefit.eligibility"
-          :benefit-source="benefit.source ? benefit.source.link : ''"
+          :benefit-source="sanitizedBenefitUrl(benefit, '')"
           :heading-classes="['bg-primary', 'text-white']"
           :show-icons="showIcons"
           :show-matching-count="showMatchingCount" />
@@ -72,7 +72,7 @@
           :aria-label="`Choices for ${benefit.title}`">
           <li class="usa-button-group__item">
             <a
-              :href="benefit.source.link"
+              :href="sanitizedBenefitUrl(benefit)"
               target="_blank"
               :aria-label="`How to apply for ${benefit.title}`"
               class="usa-button print:display-none">
@@ -89,6 +89,8 @@
 import _ from "lodash"
 import { mapGetters } from "vuex"
 import mapTags from "~/mixins/MapTags"
+import sanitizeUrl from "~/mixins/SanitizeBears"
+
 let USWDS
 let accordion
 /* istanbul ignore if */
@@ -97,7 +99,7 @@ if (process.client) {
   accordion = USWDS.accordion
 }
 export default {
-  mixins: [mapTags],
+  mixins: [mapTags, sanitizeUrl],
   props: {
     expanded: {
       type: Boolean,
@@ -183,6 +185,7 @@ export default {
       }
       return "border-gray-30"
     },
+
     getCriteriaMatchLanguage(eligibilityCriteria) {
       if (eligibilityCriteria.some((c) => this.doesCriterionMatchSelection(c) === false)) {
         return "(you are not eligible)"
@@ -192,10 +195,15 @@ export default {
       return null
     },
     toggleAccordion(expanded) {
-      for (const button of this.$refs.accordionButtons) {
-        /* istanbul ignore next */
-        accordion?.toggle(button, expanded)
+      if (this.$refs.accordionButtons) {
+        for (const button of this.$refs.accordionButtons) {
+          /* istanbul ignore next */
+          accordion?.toggle(button, expanded)
+        }
       }
+    },
+    sanitizedBenefitUrl(benefit, defaultValue = "#") {
+      return this.sanitizeUrl(benefit.source ? benefit.source.link : defaultValue)
     },
   },
 }
@@ -204,6 +212,7 @@ export default {
 .benefit-list-move {
   transition: transform 1s;
 }
+
 @media print {
   .usa-accordion--bordered .usa-accordion__content.usa-prose {
     display: block !important;

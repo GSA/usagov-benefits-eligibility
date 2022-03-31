@@ -14,7 +14,7 @@ export function createContentMock(collections) {
   // if specific content is added as an optional param, a single object is returned
   return jest.fn(function (queryName, options = null) {
     if (options == null) {
-      const query = new QueryBuilder(
+      return new QueryBuilder(
         {
           query: db.getCollection(queryName).chain(),
           path: queryName,
@@ -22,7 +22,6 @@ export function createContentMock(collections) {
         },
         {}
       )
-      return query
     } else {
       const obj = db.getCollection(queryName).findOne({ slug: options })
       return {

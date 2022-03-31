@@ -1,11 +1,10 @@
 function buf2hex(buffer) {
-  let u = new Uint8Array(buffer)
+  const u = new Uint8Array(buffer)
   const a = new Array(u.length)
   let i = u.length
   while (i--) {
     a[i] = (u[i] < 16 ? "0" : "") + u[i].toString(16)
   }
-  u = null
   return a.join("")
 }
 

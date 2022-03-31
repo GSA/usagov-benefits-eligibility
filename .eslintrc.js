@@ -74,5 +74,8 @@ module.exports = {
         allowChildren: false,
       },
     ],
+    // https://open-wc.org/docs/linting/eslint-plugin-lit-a11y/rules/no-invalid-change-handler/
+    // Seems to be a thing for older browsers
+    "vuejs-accessibility/no-onchange": ["off"],
   },
 }

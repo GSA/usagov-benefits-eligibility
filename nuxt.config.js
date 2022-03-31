@@ -1,6 +1,4 @@
 import fs from "fs"
-import path from "path"
-import CopyPlugin from "copy-webpack-plugin"
 
 const getLifeEvents = function () {
   const files = fs.readdirSync("./content/life-events/")
@@ -70,11 +68,9 @@ export default {
             know: "Here’s how you know",
             dropdown: {
               official: "Official websites use .gov",
-              officialDetails:
-                "A <strong>.gov</strong> website belongs to an official government organization in the United States.",
+              officialDetailsDotGovPrefix: "A ",
+              officialDetails: " website belongs to an official government organization in the United States.",
               secure: "Secure .gov websites use HTTPS",
-              secureDetails:
-                "A <strong>lock</strong>  or <strong>https://</strong> means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.",
               secureDetailsLockPrefix: "A",
               secureDetailsLockStrong: "lock",
               secureDetailsLockPostfix:
@@ -90,11 +86,9 @@ export default {
             know: "Así es como usted puede verificarlo",
             dropdown: {
               official: "Los sitios web oficiales usan .gov",
-              officialDetails:
-                "Un sitio web <strong>.gov</strong> pertenece a una organización oficial del Gobierno de Estados Unidos.",
+              officialDetailsDotGovPrefix: "Un sitio web",
+              officialDetails: " pertenece a una organización oficial del Gobierno de Estados Unidos.",
               secure: "Los sitios web seguros .gov usan HTTPS",
-              secureDetails:
-                "Un <strong>candado</strong> o <strong>https://</strong> significa que usted se conectó de forma segura a un sitio web .gov. Comparta información sensible sólo en sitios web oficiales y seguros.",
               secureDetailsLockPrefix: "Un",
               secureDetailsLockStrong: "candado",
               secureDetailsLockPostfix:
@@ -131,14 +125,9 @@ export default {
     extractCSS: true,
     extend(config, { isClient, isDev }) {
       if (!isDev) {
-        // const fontRule = config.module.rules.find(r => r.test.toString().includes('woff'));
-        // fontRule.use[0].options.name = '_nuxt/fonts/[name].[contenthash:7].[ext]';
         config.output.publicPath = sitePrefix
       }
     },
-    // optimization: {
-    //   minimize: false,
-    // },
   },
 
   generate: {

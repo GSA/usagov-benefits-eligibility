@@ -1,9 +1,9 @@
-import { shallowMount, mount } from "@vue/test-utils"
+import { shallowMount } from "@vue/test-utils"
 import beforeAllTests from "@/test/beforeAllTests"
 import { createContentMock } from "@/test/mockContent"
 import Vuex from "vuex"
-import LifeEventPage from "~/pages/_slug/index.vue"
-import { state as criteriaState, mutations, getters, actions } from "~/store/criteria"
+import LifeEventPage from "~/pages/_lifeEvent.vue"
+import { actions, getters, mutations, state as criteriaState } from "~/store/criteria"
 
 const THIS_LIFE_EVENT_SLUG = "this-life-event"
 const LIFE_EVENTS_DIRECTORY = "life-events"
@@ -79,7 +79,7 @@ const vueMocks = (mocks) => {
       $route: {
         path: `/${THIS_LIFE_EVENT_SLUG}`,
         params: {
-          slug: THIS_LIFE_EVENT_SLUG,
+          lifeEvent: THIS_LIFE_EVENT_SLUG,
         },
       },
     },

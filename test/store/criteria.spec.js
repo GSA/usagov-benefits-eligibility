@@ -1,6 +1,4 @@
-import { actions, getters, mutations, state } from "@/store/criteria"
-import { Crypto } from "@peculiar/webcrypto"
-import { TextEncoder } from "util"
+import { state, mutations, getters, actions } from "@/store/criteria"
 
 const mockCriteria = () => [
   {
@@ -38,30 +36,6 @@ describe("criteria", () => {
       expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(true)
       expect(storeState.eligibilityCriteria[criteria[1].criteriaKey].response).toBe("spouse")
     })
-    it("should responses not preloaded are null", () => {
-      const storeState = state()
-      const criteria = mockCriteria()
-
-      mutations.populateCriterion(storeState, {
-        criterionArray: criteria,
-      })
-      mutations.preloadedResponses(storeState, {
-        valueArray: [{ response: true, criteriaKeyHash: criteria[0].criteriaKeyHash }],
-      })
-      expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(true)
-      expect(storeState.eligibilityCriteria[criteria[1].criteriaKey].response).toBe(null)
-    })
-
-    it("should populate criterion", () => {
-      const storeState = state()
-      const criterion = mockCriteria()
-      mutations.populateCriterion(storeState, {
-        criterionArray: criterion,
-      })
-
-      expect(storeState.eligibilityCriteria[criterion[0].criteriaKey]).toBeDefined()
-      expect(storeState.hashToCriteria[criterion[0].criteriaKeyHash]).toBeDefined()
-    })
     it("should clear all responses", () => {
       const storeState = state()
       const criteria = mockCriteria()
@@ -81,6 +55,29 @@ describe("criteria", () => {
       expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(null)
       expect(storeState.eligibilityCriteria[criteria[1].criteriaKey].response).toBe(null)
       expect(localStorage.getItem("responseData")).toBe("{}")
+    })
+    it("should responses not preloaded are null", () => {
+      const storeState = state()
+      const criteria = mockCriteria()
+
+      mutations.populateCriterion(storeState, {
+        criterionArray: criteria,
+      })
+      mutations.preloadedResponses(storeState, {
+        valueArray: [{ response: true, criteriaKeyHash: criteria[0].criteriaKeyHash }],
+      })
+      expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(true)
+      expect(storeState.eligibilityCriteria[criteria[1].criteriaKey].response).toBe(null)
+    })
+    it("should populate criterion", () => {
+      const storeState = state()
+      const criterion = mockCriteria()
+      mutations.populateCriterion(storeState, {
+        criterionArray: criterion,
+      })
+
+      expect(storeState.eligibilityCriteria[criterion[0].criteriaKey]).toBeDefined()
+      expect(storeState.hashToCriteria[criterion[0].criteriaKeyHash]).toBeDefined()
     })
   })
   describe("actions", () => {
@@ -115,6 +112,14 @@ describe("criteria", () => {
       expect(commit.mock.calls.length).toBe(1)
       expect(commit.mock.calls[0][0]).toBe("clearSelectedCriteria")
     })
+
+    it("should call updateResponse commit", async () => {
+      state()
+      const commit = jest.fn()
+      await actions.updateResponse({ commit }, { criteriaKey: "applicant_eligible_senior", response: true })
+      expect(commit.mock.calls.length).toBe(1)
+      expect(commit.mock.calls[0][0]).toBe("updateResponse")
+    })
   })
   describe("getters", () => {
     it("should return an error when criteriaKey doesn't exist", () => {
@@ -136,55 +141,62 @@ describe("criteria", () => {
         expect(ret).toBe(0)
       })
     })
-
-    describe("populate with storedData", () => {
-      beforeEach(() => {
-        process.client = true
-        // const { Crypto } = require("@peculiar/webcrypto")
-        // window.crypto = new Crypto()
-        // localStorage.removeItem("responseData")
-        //
-        // const { TextEncoder } = require("util")
-        // global.TextEncoder = TextEncoder
-      })
-
-      afterEach(() => {
-        process.client = false
-        localStorage.removeItem("responseData")
-      })
-
-      it("should set value from stored data", () => {
+    describe("doesCriterionMatchSelection", () => {
+      it("should return false when acceptable critieria is invalid", async () => {
         const storeState = state()
-        const criteria = mockCriteria()
-
-        const hashedCriteria = {
-          acbca85: "died as a result of a service-connected disability",
+        const criterion = {
+          criteriaKey: "applicant_eligible_senior",
+          criteriaKeyHash: "9e63db02",
+          type: "date",
+          acceptableValues: ["=10-10-2020"],
+          response: "02-25-2021",
+          TEST: true,
         }
-        localStorage.setItem("responseData", JSON.stringify(hashedCriteria))
-        mutations.populateCriterion(storeState, {
-          criterionArray: criteria,
-        })
-        expect(storeState.eligibilityCriteria[criteria[0].criteriaKey]).toBeDefined()
-        expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(
-          "died as a result of a service-connected disability"
-        )
+        storeState.eligibilityCriteria[criterion.criteriaKey] = criterion
+        const ret = getters.doesCriterionMatchSelection(storeState, getters)(criterion)
+        expect(ret).toBe(false)
       })
+    })
 
-      it("should default to null if no stored data exists", () => {
+    describe("doesCriterionDateMatch", () => {
+      it("should return false when acceptable critieria is invalid", async () => {
         const storeState = state()
-        const criteria = mockCriteria()
-
-        const hashedCriteria = {
-          someOtherKey: "not real value",
+        const criterion = {
+          criteriaKey: "applicant_eligible_senior",
+          criteriaKeyHash: "9e63db02",
+          type: "date",
+          acceptableValues: ["=10-10-2020"],
+          response: "02-25-2021",
+          TEST: true,
         }
-
-        localStorage.setItem("responseData", JSON.stringify(hashedCriteria))
-
-        mutations.populateCriterion(storeState, {
-          criterionArray: criteria,
-        })
-        expect(storeState.eligibilityCriteria[criteria[0].criteriaKey]).toBeDefined()
-        expect(storeState.eligibilityCriteria[criteria[0].criteriaKey].response).toBe(null)
+        storeState.eligibilityCriteria[criterion.criteriaKey] = criterion
+        const ret = getters.doesCriterionDateMatch(storeState, getters)(criterion)
+        expect(ret).toBe(false)
+      })
+      it("should return false when acceptable critieria is not met", async () => {
+        const storeState = state()
+        const criterion = {
+          criteriaKey: "applicant_eligible_senior",
+          criteriaKeyHash: "9e63db02",
+          acceptableValues: ["10-10-2020"],
+          response: "02-25-2021",
+          TEST: true,
+        }
+        storeState.eligibilityCriteria[criterion.criteriaKey] = criterion
+        const ret = getters.doesCriterionMatchSelection(storeState, getters)(criterion)
+        expect(ret).toBe(false)
+      })
+      it("should return null when there are no acceptable values", async () => {
+        const storeState = state()
+        const criterion = {
+          criteriaKey: "applicant_eligible_senior",
+          criteriaKeyHash: "9e63db02",
+          response: "02-25-2021",
+          TEST: true,
+        }
+        storeState.eligibilityCriteria[criterion.criteriaKey] = criterion
+        const ret = getters.doesCriterionMatchSelection(storeState, getters)(criterion)
+        expect(ret).toBe(null)
       })
     })
   })

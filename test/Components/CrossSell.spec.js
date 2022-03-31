@@ -23,4 +23,22 @@ describe("CrossSell", () => {
     })
     expect(wrapper.vm).toBeTruthy()
   })
+
+  it("should be a Vue instance with no cards", () => {
+    const wrapper = mount(CrossSell, {
+      propsData: {
+        title: "Title",
+        cards: [],
+      },
+    })
+    expect(wrapper.vm).toBeTruthy()
+  })
+  it("should be a Vue instance with no cards", () => {
+    const wrapper = mount(CrossSell, {
+      propsData: {
+        title: "Title",
+      },
+    })
+    expect(wrapper.vm).toBeTruthy()
+  })
 })
