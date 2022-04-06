@@ -2,7 +2,7 @@ import { mount, shallowMount } from "@vue/test-utils"
 import { Store } from "vuex"
 import RadioButton from "@/components/RadioButton.vue"
 import beforeAllTests from "@/test/beforeAllTests"
-import { state as criteriaState, mutations, getters } from "~/store/criteria"
+import { getters, mutations, state as criteriaState } from "~/store/criteria"
 
 const MOCK_CRITERIA = {
   criteriaKey: "deceased_served_in_active_military",
@@ -103,5 +103,31 @@ describe("<Radio/>", () => {
     await choices.at(0).setChecked()
     expect(choices.at(0).element.value).toBe("was discharged under conditions other than dishonorable")
     expect(wrapper.find(".text-base").classes()).toContain("font-weight-normal")
+  })
+
+  test("component has disabled styles when disabled", () => {
+    const wrapper = mount(RadioButton, {
+      propsData: {
+        criteriaKey: MOCK_CRITERIA.criteriaKey,
+        label: MOCK_CRITERIA.label,
+        values: MOCK_CRITERIA.values,
+        isDisabled: true,
+      },
+    })
+    expect(wrapper.vm.disabledStyle).toBe("border-2px border-dotted border-gray-30 padding-1")
+    expect(wrapper.vm.disabledLabel).toBe("text-gray-30")
+  })
+
+  test("component no disabled styles when not disabled", () => {
+    const wrapper = mount(RadioButton, {
+      propsData: {
+        criteriaKey: MOCK_CRITERIA.criteriaKey,
+        label: MOCK_CRITERIA.label,
+        values: MOCK_CRITERIA.values,
+        isDisabled: false,
+      },
+    })
+    expect(wrapper.vm.disabledStyle).toBeNull()
+    expect(wrapper.vm.disabledLabel).toBeNull()
   })
 })

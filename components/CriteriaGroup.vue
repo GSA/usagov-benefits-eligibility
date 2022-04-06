@@ -1,5 +1,8 @@
 <template>
   <div>
+    <SummaryBox
+      v-if="topLevelFilters.length > 0"
+      :top-level-filters="topLevelFilters" />
     <template v-for="criteriaGroup in lifeEventCriteria">
       <div
         :id="`criteriaGroup-${criteriaGroup.criteriaGroupKey}-${_uid}`"
@@ -21,12 +24,14 @@
           <template v-for="criterion in getCriteriaMap(criteriaGroup.criteriaKeys)">
             <CriteriaChild
               :key="criterion.criteriaKey"
+              :criteria="criterion"
               :criteria-key="criterion.criteriaKey"
               :label="criterion.label"
               :values="criterion.values.split('; ')"
               :type="criterion.type"
               :criteria-group-key="criteriaGroup.criteriaGroupKey"
               :response="criterion.response"
+              :top-level-filters="topLevelFilters"
               class="margin-y-2 tablet:margin-y-3" />
           </template>
         </div>
@@ -43,10 +48,16 @@
 </template>
 <script>
 import { mapGetters } from "vuex"
-
+import SummaryBox from "./SummaryBox.vue"
 export default {
+  name: "CriteriaGroup",
+  components: { SummaryBox },
   props: {
     lifeEventCriteria: {
+      type: Array,
+      default: /* istanbul ignore next */ () => [],
+    },
+    topLevelFilters: {
       type: Array,
       default: /* istanbul ignore next */ () => [],
     },

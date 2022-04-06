@@ -1,5 +1,7 @@
 <template>
-  <fieldset class="usa-fieldset">
+  <fieldset
+    class="usa-fieldset"
+    :class="disabledStyle">
     <input
       :id="`${uniqueId}-${criteriaKey}`"
       class="usa-checkbox__input"
@@ -7,6 +9,7 @@
       :name="`${uniqueId}-${criteriaKey}`"
       :value="`${uniqueId}-${criteriaKey}`"
       :checked="response === true"
+      :disabled="isDisabled"
       @change="updateEligibilityChecked($event, criteriaKey)" />
     <label
       class="usa-checkbox__label"
@@ -42,16 +45,27 @@ export default {
         return ["left-rail", "benefit-card"].includes(value)
       },
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       uniqueId: _.uniqueId("checkbox-"),
     }
   },
+
   computed: {
     selectedStyle() {
       if (this.location === "benefit-card" && this.response === true) {
         return "text-success text-bold"
+      }
+      return null
+    },
+    disabledStyle() {
+      if (this.isDisabled) {
+        return "border-2px border-dotted border-gray-30 padding-1"
       }
       return null
     },

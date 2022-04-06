@@ -7,8 +7,14 @@ module.exports = {
   parserOptions: {
     parser: "babel-eslint",
   },
-  extends: ["@nuxtjs", "plugin:nuxt/recommended", "plugin:vuejs-accessibility/recommended", "prettier"],
-  plugins: ["vuejs-accessibility"],
+  extends: [
+    "@nuxtjs",
+    "plugin:nuxt/recommended",
+    "plugin:vuejs-accessibility/recommended",
+    "plugin:sonarjs/recommended",
+    "prettier",
+  ],
+  plugins: ["vuejs-accessibility", "sonarjs"],
   // add your custom rules here
   rules: {
     "comma-dangle": 0,

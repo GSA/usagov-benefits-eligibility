@@ -126,7 +126,10 @@
                 {{ lifeEvent.eligibilityCriteriaDescription }}
               </div>
             </div>
-            <CriteriaGroup :life-event-criteria="lifeEvent.eligibilityCriteria" />
+
+            <CriteriaGroup
+              :life-event-criteria="lifeEvent.eligibilityCriteria"
+              :top-level-filters="lifeEvent.topLevelFilter" />
             <share-results @print="openAll()" />
           </div>
         </div>
