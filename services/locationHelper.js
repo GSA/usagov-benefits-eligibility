@@ -3,9 +3,8 @@ import zipnrviens from "zipcodes-nrviens"
 import axios from "axios"
 
 function validateLocation({ criterion, response, callback }) {
-  
   if (criterion.acceptableValues) {
-    if(!criterion.acceptableValues.some(value => ['ih', 'ia', 'pa', 'hm'].contains(value))) {
+    if (!criterion.acceptableValues.some((value) => ["ih", "ia", "pa", "hm"].contains(value))) {
       switch (criterion.acceptableValues.length) {
         case 1:
           return criterion.acceptableValues[0] === response
@@ -32,14 +31,14 @@ function validateLocation({ criterion, response, callback }) {
   return null
 }
 
-function checkZip(userResponse, callback, program=null) {
+function checkZip(userResponse, callback, program = null) {
   const zipCodeInfo = zipnrviens.lookup(parseInt(userResponse))
   const { state, county } = zipCodeInfo
   let requestUrl = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?$filter=(state eq '${state}' and declaredCountyArea eq '${county} (County)' and incidentEndDate eq ''`
-  if(program !== null){
-    requestUrl += ' ' + program + "ProgramDeclared eq true)"
+  if (program !== null) {
+    requestUrl += " " + program + "ProgramDeclared eq true)"
   } else {
-    requestUrl += ')'
+    requestUrl += ")"
   }
   axios
     .get(requestUrl)

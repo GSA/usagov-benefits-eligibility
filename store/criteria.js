@@ -96,7 +96,7 @@ export const getters = {
       return criterion.TEST
         ? theGetters.doesCriterionDateMatch(theState)(criterion)
         : theGetters.doesCriterionDateMatch(criterion)
-    } else if (theGetters.getCriterionByEligibilityKey(criterion.criteriaKey).type === 'location') {
+    } else if (theGetters.getCriterionByEligibilityKey(criterion.criteriaKey).type === "location") {
       return theGetters.getCriterionByEligibilityKey(criterion.criteriaKey).response
     } else {
       if (!criterion.acceptableValues) {
