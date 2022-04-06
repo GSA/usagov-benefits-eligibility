@@ -19,5 +19,5 @@ eligibility:
   - criteriaKey: applicant_relationship
     acceptableValues: ["spouse", "child", "parent", "other family member"]
   - criteriaKey: applicant_disaster_zone
-    acceptableValues: ["ih"]
+    acceptableValues: ["28105"]
 ---

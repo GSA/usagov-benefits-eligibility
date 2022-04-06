@@ -64,6 +64,7 @@
               class="usa-text-input">
               <LocationInput
                 :criteriaKey="criterion.criteriaKey"
+                :values="criterion.acceptableValues"
                 :label="getCriterionLabel(criterion)"
                 :response="getCriterionByEligibilityKey(criterion.criteriaKey).response"
                 location="benefit-card" />

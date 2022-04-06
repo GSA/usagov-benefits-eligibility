@@ -16,6 +16,7 @@
       :key="criteriaKey">
       <LocationInput
         :criteriaKey="criteriaKey"
+        :values="values"
         :label="getCriterionLabel(criterion)"
         :response="getCriterionByEligibilityKey(criteriaKey).response"
         location="benefit-card" />

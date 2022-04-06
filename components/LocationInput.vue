@@ -34,7 +34,7 @@ export default {
       type: [String, Object, Boolean],
       default: "no response provided",
     },
-    acceptableValues: {
+    values: {
       type: Array,
     },
     location: {
@@ -84,9 +84,8 @@ export default {
     updateLocationInfo(event, key) {
       console.log(this.acceptableValues)
       const zipCode = event.target.value
-      localStorage.setItem('zipCode', zipCode)
       validateLocation({
-        criterion: this.getCriterionByEligibilityKey(this.criteriaKey),
+        values: this.values,
         response: zipCode,
         callback: (response) => {
           const disasters = response.data.DisasterDeclarationsSummaries
