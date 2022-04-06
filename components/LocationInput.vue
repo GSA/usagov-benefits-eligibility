@@ -1,7 +1,7 @@
 <template>
   <div>
     <label
-      class="usa-label"
+      :class="labelClass"
       for="input-type-text"
       :style="selectedStyle">
       {{ label }}
@@ -17,6 +17,8 @@
 
 <script>
 import _ from "lodash"
+import { mapGetters } from "vuex"
+import validateLocation from "../services/locationHelper"
 export default {
   name: "LocationInput",
   props: {
@@ -32,6 +34,9 @@ export default {
       type: [String, Object, Boolean],
       default: "no response provided",
     },
+    acceptableValues: {
+      type: Array,
+    },
     location: {
       type: String,
       validator: (value) => {
@@ -46,6 +51,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getCriterionByEligibilityKey: "criteria/getCriterionByEligibilityKey",
+    }),
+    labelClass() {
+      return `usa-label usa-label--${this.classFromResponse()}`
+    },
     selectedStyle() {
       if (this.location === "left-rail") {
         return "text-bold"
@@ -53,24 +64,60 @@ export default {
       return ""
     },
     inputClass() {
-      return `usa-input usa-input${this.response === null ? "" : this.response === false ? "--error" : "--success"}`
+      return `usa-input usa-input--${this.classFromResponse()}`
     },
+    
   },
   mounted() {
     this.uniqueId = _.uniqueId("checkbox-")
   },
   methods: {
-    updateLocationInfo(event, key) {
-      const zipCode = event.target.value
-      window[key + "_element"] = event.target
-      const localCriterion = {
-        criteriaKey: key,
-        response: zipCode,
+    classFromResponse() {
+      let cls = "error"
+      if (this.response) {
+        cls = "success"
+      } else if (this.response == null) {
+        cls = "empty"
       }
-      this.$store.dispatch("criteria/updateResponse", localCriterion)
+      return cls
+    },
+    updateLocationInfo(event, key) {
+      console.log(this.acceptableValues)
+      const zipCode = event.target.value
+      localStorage.setItem('zipCode', zipCode)
+      validateLocation({
+        criterion: this.getCriterionByEligibilityKey(this.criteriaKey),
+        response: zipCode,
+        callback: (response) => {
+          const disasters = response.data.DisasterDeclarationsSummaries
+          const eligible = disasters.length > 1
+          const localCriterion = {
+            criteriaKey: key,
+            response: eligible,
+          }
+          this.$store.dispatch("criteria/updateResponse", localCriterion)          
+        }
+      })
     },
   },
 }
 </script>
 
-<style></style>
+<style scoped>
+.usa-label--empty,
+.usa-input--empty {
+  color: #1b1b1b;
+}
+
+.usa-label--success,
+.usa-input--success {
+  color: green;
+  font-weight: bold;
+}
+
+.usa-label--error,
+.usa-input--error {
+  color: red;
+  font-weight: bold;
+}
+</style>

@@ -43,6 +43,7 @@
               class="usa-checkbox">
               <DateInput
                 :criteria-key="criterion.criteriaKey"
+                :acceptableValues="criterion.acceptableValues"
                 :label="getCriterionLabel(criterion)"
                 :response="doesCriterionDateMatch(criterion)"
                 :date-response="getCriterionByEligibilityKey(criterion.criteriaKey).response"
@@ -64,7 +65,7 @@
               <LocationInput
                 :criteriaKey="criterion.criteriaKey"
                 :label="getCriterionLabel(criterion)"
-                :response="doesCriterionMatchSelection(criterion)"
+                :response="getCriterionByEligibilityKey(criterion.criteriaKey).response"
                 location="benefit-card" />
             </div>
             <div v-if="getCriterionByEligibilityKey(criterion.criteriaKey).type === 'radio'">

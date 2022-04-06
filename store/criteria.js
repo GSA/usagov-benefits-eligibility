@@ -1,5 +1,4 @@
 import Vue from "vue"
-import validateLocation from "~/services/locationHelper"
 import stringToHash from "../services/stringToHash"
 import validateDateAgainstAcceptance from "~/services/dateHelper"
 
@@ -97,6 +96,8 @@ export const getters = {
       return criterion.TEST
         ? theGetters.doesCriterionDateMatch(theState)(criterion)
         : theGetters.doesCriterionDateMatch(criterion)
+    } else if (theGetters.getCriterionByEligibilityKey(criterion.criteriaKey).type === 'location') {
+      return theGetters.getCriterionByEligibilityKey(criterion.criteriaKey).response
     } else {
       if (!criterion.acceptableValues) {
         return null

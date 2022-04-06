@@ -14,9 +14,9 @@
       v-if="type === 'location'"
       :key="criteriaKey">
       <LocationInput
-        :criteriaKey="criterion.criteriaKey"
+        :criteriaKey="criteriaKey"
         :label="getCriterionLabel(criterion)"
-        :response="doesCriterionMatchSelection(criterion)"
+        :response="getCriterionByEligibilityKey(criteriaKey).response"
         location="benefit-card" />
     </div>
     <div
@@ -24,6 +24,7 @@
       :key="criteriaKey">
       <DateInput
         :criteria-key="criteriaKey"
+        :acceptableValues="getCriterionByEligibilityKey(criteriaKey).acceptableValues"
         :label="getCriterionLabel()"
         :response="doesCriterionDateMatch(getCriterionByEligibilityKey(criteriaKey))"
         :date-response="getCriterionByEligibilityKey(criteriaKey).response"
