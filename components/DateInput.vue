@@ -90,7 +90,7 @@
 
 .usa-legend--error {
   color: red;
-  font-weight: 700;
+  font-weight: bold;
 }
 </style>
 
