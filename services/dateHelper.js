@@ -1,10 +1,11 @@
-import { toDate, isEqual, isBefore, isAfter, sub } from "date-fns"
+import { toDate, isEqual, isBefore, isAfter, sub, isFuture, isExists } from "date-fns"
+
+const DETERMINERS = ["months", "days", "years"]
 
 function validateDateAgainstAcceptance({ criterion, userInputDate }) {
-  const DETERMINERS = ["months", "days", "years"]
   let determiner = null
   let checkResult = null
-  // need to check the date
+  
   for (const index in criterion.acceptableValues) {
     const value = criterion.acceptableValues[index].toLowerCase()
     const operator = value[0]
@@ -36,33 +37,43 @@ function validateDateAgainstAcceptance({ criterion, userInputDate }) {
     if (isNaN(acceptanceDate)) {
       checkResult = null
     }
+    checkResult = checkUserDate(userInputDate, determiner, operator, acceptanceDate)
     // checking to see if the inputted date is valid / complete
-    if (!isNaN(userInputDate)) {
-      userInputDate = toDate(userInputDate)
-      switch (operator) {
-        case "=":
-          checkResult = isEqual(userInputDate, acceptanceDate)
-          break
-        case ">":
-          // handling the use case of a user being <60Y & >40Y also being reflected as a range
-          // >01-01-1962, <01-01-1982
-          checkResult = DETERMINERS.includes(determiner)
-            ? isAfter(acceptanceDate, userInputDate)
-            : isAfter(userInputDate, acceptanceDate)
-          break
-        case "<":
-          checkResult = DETERMINERS.includes(determiner)
-            ? isBefore(acceptanceDate, userInputDate)
-            : isBefore(userInputDate, acceptanceDate)
-          break
-        default:
-          checkResult = null
-          break
-      }
-      if (checkResult === false) {
-        break
-      }
+    if (checkResult === false) {
+      break
     }
+  }
+  return checkResult
+}
+
+function checkUserDate(userInputDate, determiner, operator, acceptanceDate) {
+  let checkResult = null
+  if (!isNaN(userInputDate)) {
+    userInputDate = toDate(userInputDate)
+    // first will check if the users inputted date is in the future
+    if (isFuture(userInputDate) || !isExists(userInputDate)) {
+      return false 
+    }
+    switch (operator) {
+      case "=":
+        checkResult = isEqual(userInputDate, acceptanceDate)
+        break
+      case ">":
+        // handling the use case of a user being <60Y & >40Y also being reflected as a range
+        // >01-01-1962, <01-01-1982
+        checkResult = DETERMINERS.includes(determiner)
+          ? isAfter(acceptanceDate, userInputDate)
+          : isAfter(userInputDate, acceptanceDate)
+        break
+      case "<":
+        checkResult = DETERMINERS.includes(determiner)
+          ? isBefore(acceptanceDate, userInputDate)
+          : isBefore(userInputDate, acceptanceDate)
+        break
+      default:
+        checkResult = null
+        break
+    }    
   }
   return checkResult
 }
