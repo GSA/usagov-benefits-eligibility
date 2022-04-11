@@ -69,26 +69,22 @@
   margin-bottom: -0.6875rem;
 }
 
-.usa-legend--empty {
+.usa-legend--empty,
+.usa-label--empty,
+.usa-input--empty {
   color: #1b1b1b;
 }
 
-.bears-label--error,
-.bears-label--success {
-  color: #71767a
-}
-
-.bears-input--error,
-.bears-input--success {
-  color: black;
-}
-
-.usa-legend--success {
+.usa-legend--success,
+.usa-label--success,
+.usa-input--success {
   color: green;
   font-weight: bold;
 }
 
-.usa-legend--error {
+.usa-legend--error,
+.usa-label--error,
+.usa-input--error {
   color: red;
   font-weight: bold;
 }
@@ -144,13 +140,13 @@ export default {
       return this.location === "left-rail" ? "text-bold" : ""
     },
     labelClass() {
-      return `usa-label bears-label--${this.classFromResponse()}`
+      return `usa-label usa-label--${this.classFromResponse()}`
     },
     legendClass() {
       return `usa-legend usa-legend--${this.classFromResponse()}`
     },
     inputClass() {
-      return `usa-input bears-input--${this.classFromResponse()}`
+      return `usa-input usa-input--${this.classFromResponse()}`
     },
   },
   mounted() {
