@@ -51,16 +51,8 @@ function checkUserDate(userInputDate, determiner, operator, acceptanceDate) {
   if (!isNaN(userInputDate)) {
     userInputDate = toDate(userInputDate)
     // first will check if the users inputted date is in the future
-    if (isFuture(userInputDate)) {
+    if (isFuture(userInputDate) || !isExists(userInputDate)) {
       return false 
-    }
-    let dateData = [
-      userInputDate.getFullYear(),
-      userInputDate.getMonth(),
-      userInputDate.getDate()
-    ]
-    if(!isExists(...dateData)) {
-      return false
     }
     switch (operator) {
       case "=":
