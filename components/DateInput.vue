@@ -85,7 +85,7 @@
 
 .usa-legend--success {
   color: green;
-  font-weight: 700;
+  font-weight: bold;
 }
 
 .usa-legend--error {
