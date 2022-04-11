@@ -28,7 +28,7 @@ applicant_degree_cerificate_program,You are enrolled or accepted as a student in
 applicant_disaster_zone,What is your zip code?,location,,
 applicant-relatonships,,,,
 applicant_lost_a_family_member,Did you recently lose a loved one?,radio,yes; no,
-applicant_lost_a_service_member,Did you recently lose a loved one who served in the military?,radio,yes; no,
+applicant_lost_a_service_member,Did you recently lose a loved one who served in the active military, naval or air service?,radio,yes; no,
 applicant_child_spouse_SS,You are a child or a spouse of a person who is receiving retirement or disability benefits.,boolean,TRUE,
 applicant_family_of_service_member,"You are a family member of a person who served in the active military, naval, or air service, and he/she is",select,missing in action; captured/detained in the line of duty; disabled due to a service-connected disability,
 applicant_care_for_child,"You are caring for the child of the person who died, is retired or has disabilities, and the child is under age 16 or is disabled.",boolean,TRUE,
