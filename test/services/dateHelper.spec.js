@@ -4,6 +4,7 @@ function getTestDateString(daysOffsetFromToday) {
   const testDte = new Date()
   testDte.setDate(testDte.getDate() + daysOffsetFromToday)
   const testDate = testDte.toLocaleDateString("en-US", { day: "2-digit", month: "2-digit", year: "numeric" })
+  console.log(testDate)
   return testDate.replaceAll("/", "-")
 }
 
