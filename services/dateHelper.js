@@ -5,7 +5,7 @@ const DETERMINERS = ["months", "days", "years"]
 function validateDateAgainstAcceptance({ criterion, userInputDate }) {
   let determiner = null
   let checkResult = null
-
+  
   for (const index in criterion.acceptableValues) {
     const value = criterion.acceptableValues[index].toLowerCase()
     const operator = value[0]
@@ -52,10 +52,14 @@ function checkUserDate(userInputDate, determiner, operator, acceptanceDate) {
     userInputDate = toDate(userInputDate)
     // first will check if the users inputted date is in the future
     if (isFuture(userInputDate)) {
-      return false
+      return false 
     }
-    let dateData = [userInputDate.getFullYear(), userInputDate.getMonth(), userInputDate.getDate()]
-    if (!isExists(...dateData)) {
+    let dateData = [
+      userInputDate.getFullYear(),
+      userInputDate.getMonth(),
+      userInputDate.getDate()
+    ]
+    if(!isExists(...dateData)) {
       return false
     }
     switch (operator) {
@@ -77,7 +81,7 @@ function checkUserDate(userInputDate, determiner, operator, acceptanceDate) {
       default:
         checkResult = null
         break
-    }
+    }    
   }
   return checkResult
 }

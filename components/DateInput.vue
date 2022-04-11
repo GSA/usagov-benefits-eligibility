@@ -75,7 +75,7 @@
 
 .bears-label--error,
 .bears-label--success {
-  color: #71767a;
+  color: #71767a
 }
 
 .bears-input--error,
