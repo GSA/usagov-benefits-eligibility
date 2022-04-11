@@ -73,53 +73,52 @@ export default {
     DropDown,
     CheckBox,
     LocationInput,
-    DateInput
+    DateInput,
   },
   props: {
     criteriaKey: {
       type: String,
-      default: "No key provided"
+      default: "No key provided",
     },
     label: {
       type: String,
-      default: "No label provided"
+      default: "No label provided",
     },
     type: {
       type: String,
-      default: "No type provided"
+      default: "No type provided",
     },
     values: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     criteriaGroupKey: {
       type: String,
-      default: "criteriaGroup"
+      default: "criteriaGroup",
     },
     response: {
       type: [Boolean, String],
-      default: false
+      default: false,
     },
     criteria: {
       type: Object,
-      default: () => {
-      }
+      default: () => {},
     },
     topLevelFilters: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
-      isGroupKeyDisabled: false
+      isGroupKeyDisabled: false,
     }
   },
   computed: {
     ...mapGetters({
       getCriterionByEligibilityKey: "criteria/getCriterionByEligibilityKey",
-      doesCriterionDateMatch: "criteria/doesCriterionDateMatch"
-    })
+      doesCriterionDateMatch: "criteria/doesCriterionDateMatch",
+    }),
   },
 
   created() {
@@ -145,8 +144,8 @@ export default {
   methods: {
     getCriterionLabel() {
       return this.label || this.getCriterionByEligibilityKey(this.criteriaKey).label
-    }
-  }
+    },
+  },
 }
 </script>
 <style

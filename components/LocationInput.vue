@@ -66,7 +66,6 @@ export default {
     inputClass() {
       return `usa-input usa-input--${this.classFromResponse()}`
     },
-    
   },
   mounted() {
     this.uniqueId = _.uniqueId("checkbox-")
@@ -94,8 +93,8 @@ export default {
             criteriaKey: key,
             response: eligible,
           }
-          this.$store.dispatch("criteria/updateResponse", localCriterion)          
-        }
+          this.$store.dispatch("criteria/updateResponse", localCriterion)
+        },
       })
     },
   },
