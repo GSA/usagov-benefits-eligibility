@@ -10,7 +10,9 @@
       </span>
     </h3>
     <client-only>
-      <ul class="usa-icon-list grid-row padding-x-205 padding-top-205 padding-bottom-1">
+      <ul
+        class="usa-icon-list grid-row padding-x-205 padding-top-205 padding-bottom-1"
+        role="group">
         <li
           v-for="(criterion, index) in benefitEligibilityCriteria"
           :key="criterion.criteriaKey"
