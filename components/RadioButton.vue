@@ -19,10 +19,11 @@
     <template v-for="(value, index) in values">
       <div
         :key="value"
+        role="group"
         class="usa-radio tablet:padding-left-1">
         <input
           :id="`${uniqueId}-${criteriaKey}-${value}`"
-          class="usa-radio__input"
+          class="usa-radio__input sr-only"
           type="radio"
           :name="`${uniqueId}-${criteriaKey}-${value}`"
           :value="value"
