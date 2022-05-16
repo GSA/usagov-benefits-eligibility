@@ -13,6 +13,16 @@
       "secureDetailsLockPostfix": "o https:// significa que usted se conectó de forma segura a un sitio web .gov. Comparta información sensible sólo en sitios web oficiales y seguros."
     }
   },
+  "eligibilityList": {
+    "heading": "Criterios clave de elegibilidad",
+    "you_must": "Debe cumplir con todos los criterios. Actualmente te encuentras",
+    "of": "de",
+    "additional": "Pueden aplicarse criterios de elegibilidad adicionales.",
+    "review": "Por favor revise los requisitos completos en",
+    "match": "Este criterio coincidió",
+    "remove": "Este criterio eliminó este beneficio",
+    "noMatch": "Este criterio no ha coincidido"
+  },
   "skipnav": "Saltar al contenido principal",
   "returnToTop": "Regresar arriba",
   "utilityNav": {
@@ -117,5 +127,60 @@
       "buttonText": "Subscríbase ahora"
     },
     "subFooter": "USAGov en Español es la guía oficial de información y servicios del Gobierno"
+  },
+  "lifeEvent": {
+    "buttonLabel1": "Open All",
+    "buttonLabel2": "Close All",
+    "buttonLabel3": "Clear Selections",
+    "important": "Important information",
+    "benefits": "Benefits",
+    "results": "Results",
+    "labelShowText": "Showing",
+    "labelShowText2": "related benefits sorted by:",
+    "option1": "Relevance",
+    "option2": "Title (A-Z)",
+    "eligibilityCriteria": "Eligibility Criteria",
+    "currentlyViewing": "Currently viewing",
+    "fetchState": {
+      "pending": "Fetching benefits...",
+      "error": "Error while fetching benefits.",
+      "none": "No matching benefits found."
+    }
+  },
+  "types": {
+    "heading": "If you know the specific type of benefit you are looking for, select it below.",
+    "sort": "Benefits by type"
+  },
+  "agency": {
+    "sort": "Benefits by agency"
+  },
+  "buttons": {
+    "open_all": "Open All",
+    "close_all": "Close All",
+    "my_selections": "my selections"
+  },
+  "radio": {
+    "not_applicable": "not applicable"
+  },
+  "shareResults": {
+    "description": "Copy a link to this page with the criteria you selected above. Make sure to share it only with those you trust as\nyour answers will be visible.",
+    "linkCopied": "Link with my selections is copied",
+    "copy": "Copy my selections",
+    "email": "Email my selections"
+  },
+  "accordion": {
+    "provided": "Provided by",
+    "apply": "How to Apply",
+    "not_eligible": "you are not eligible",
+    "eligible": "you might be eligible"
+  },
+  "criteria_group": {
+    "non_selected": "No eligibility criteria selected"
+  },
+  "dateInput": {
+    "month": "Month",
+    "day": "Day",
+    "year": "Year",
+    "Please enter a valid date.": "Please enter a valid date."
   }
 }
