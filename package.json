@@ -52,7 +52,7 @@
     "axe-core": "^4.4.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^28.0.2",
-    "eslint": "8.14.0",
+    "eslint": "8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-promise": "^6.0.0",
