@@ -68,7 +68,7 @@
     "path-parse": ">=1.0.7",
     "prettier": "^2.6.2",
     "sass": "^1.50.1",
-    "sass-loader": "^10.2.1",
+    "sass-loader": "^13.0.2",
     "set-value": ">=4.0.1",
     "tmpl": ">=1.0.5",
     "uswds": "^2.13.1",
